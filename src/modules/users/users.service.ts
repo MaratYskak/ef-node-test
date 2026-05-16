@@ -1,17 +1,16 @@
 import bcrypt from 'bcrypt';
 import { UsersRepository } from './users.repository';
-import { UserRole } from '@prisma/client';
+import { toUserResponse } from '../../common/mappers/user.mapper';
 
 export class UsersService {
     constructor(private readonly usersRepository: UsersRepository) { }
 
     async createUser(data: {
         fullName: string;
-        birthDate: Date;
+        birthDate: string;
         email: string;
         password: string;
     }) {
-        // Проверка: существует ли пользователь
         const existingUser = await this.usersRepository.findByEmail(data.email);
 
         if (existingUser) {
@@ -20,7 +19,6 @@ export class UsersService {
 
         const hashedPassword = await bcrypt.hash(data.password, 10);
 
-        // Создаём пользователя
         const user = await this.usersRepository.create({
             fullName: data.fullName,
             birthDate: new Date(data.birthDate),
@@ -28,7 +26,7 @@ export class UsersService {
             password: hashedPassword,
         });
 
-        return user;
+        return toUserResponse(user);
     }
 
     async getUserById(id: string) {
@@ -38,11 +36,13 @@ export class UsersService {
             throw new Error('User not found');
         }
 
-        return user;
+        return toUserResponse(user);
     }
 
     async getAllUsers() {
-        return this.usersRepository.findAll();
+        const users = await this.usersRepository.findAll();
+
+        return users.map(toUserResponse);
     }
 
     async blockUser(id: string) {
@@ -52,8 +52,10 @@ export class UsersService {
             throw new Error('User not found');
         }
 
-        return this.usersRepository.update(id, {
+        const updatedUser = await this.usersRepository.update(id, {
             isActive: false,
         });
+
+        return toUserResponse(updatedUser);
     }
 }

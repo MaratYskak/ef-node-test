@@ -1,4 +1,5 @@
-import { usersService } from './modules/users';
+import { UsersController } from './modules/users/users.controller';
+import { Request, Response, NextFunction } from 'express';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -8,6 +9,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
+
+const usersController = new UsersController();
+
+const asyncHandler =
+    (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) =>
+        (req: Request, res: Response, next: NextFunction) =>
+            Promise.resolve(fn(req, res, next)).catch(next);
 
 app.use(cors());
 
@@ -23,17 +31,9 @@ app.get('/health', (_req, res) => {
     });
 });
 
-app.post('/auth/register', async (req, res) => {
-    try {
-        const user = await usersService.createUser(req.body);
-
-        res.status(201).json(user);
-    } catch (error: any) {
-        res.status(400).json({
-            message: error.message,
-        });
-    }
-});
+app.post('/auth/register', asyncHandler((req, res) => {
+    return usersController.register(req, res);
+}));
 
 const PORT = process.env.PORT || 3000;
 
