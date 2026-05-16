@@ -23,7 +23,7 @@ export class UsersService {
         // Создаём пользователя
         const user = await this.usersRepository.create({
             fullName: data.fullName,
-            birthDate: data.birthDate,
+            birthDate: new Date(data.birthDate),
             email: data.email,
             password: hashedPassword,
         });

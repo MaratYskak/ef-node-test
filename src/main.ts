@@ -1,3 +1,4 @@
+import { usersService } from './modules/users';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -20,6 +21,18 @@ app.get('/health', (_req, res) => {
     res.json({
         status: 'ok',
     });
+});
+
+app.post('/auth/register', async (req, res) => {
+    try {
+        const user = await usersService.createUser(req.body);
+
+        res.status(201).json(user);
+    } catch (error: any) {
+        res.status(400).json({
+            message: error.message,
+        });
+    }
 });
 
 const PORT = process.env.PORT || 3000;
