@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { UsersRepository } from './users.repository';
 import { toUserResponse } from '../../common/mappers/user.mapper';
+import { AppError } from '../../common/errors/app-error';
 
 export class UsersService {
     constructor(private readonly usersRepository: UsersRepository) { }
@@ -14,7 +15,7 @@ export class UsersService {
         const existingUser = await this.usersRepository.findByEmail(data.email);
 
         if (existingUser) {
-            throw new Error('User with this email already exists');
+            throw new AppError('User with this email already exists', 409);
         }
 
         const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -33,7 +34,7 @@ export class UsersService {
         const user = await this.usersRepository.findById(id);
 
         if (!user) {
-            throw new Error('User not found');
+            throw new AppError('User not found', 404);
         }
 
         return toUserResponse(user);

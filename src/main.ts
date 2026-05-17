@@ -1,3 +1,4 @@
+import { errorMiddleware } from './common/middleware/error.middleware';
 import { UsersController } from './modules/users/users.controller';
 import { Request, Response, NextFunction } from 'express';
 import express from 'express';
@@ -34,6 +35,8 @@ app.get('/health', (_req, res) => {
 app.post('/auth/register', asyncHandler((req, res) => {
     return usersController.register(req, res);
 }));
+
+app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 3000;
 
