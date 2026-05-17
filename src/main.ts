@@ -1,3 +1,4 @@
+import { AuthController } from './modules/auth/auth.controller';
 import { errorMiddleware } from './common/middleware/error.middleware';
 import { UsersController } from './modules/users/users.controller';
 import { Request, Response, NextFunction } from 'express';
@@ -12,6 +13,7 @@ dotenv.config();
 const app = express();
 
 const usersController = new UsersController();
+const authController = new AuthController();
 
 const asyncHandler =
     (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) =>
@@ -34,6 +36,10 @@ app.get('/health', (_req, res) => {
 
 app.post('/auth/register', asyncHandler((req, res) => {
     return usersController.register(req, res);
+}));
+
+app.post('/auth/login', asyncHandler((req, res) => {
+    return authController.login(req, res);
 }));
 
 app.use(errorMiddleware);
