@@ -1,3 +1,6 @@
+import { validationMiddleware } from './common/middleware/validation.middleware';
+import { registerSchema } from './modules/auth/schemas/register.schema';
+import { loginSchema } from './modules/auth/schemas/login.schema';
 import { authMiddleware } from './common/middleware/auth.middleware';
 import { roleMiddleware } from './common/middleware/role.middleware';
 import { AuthController } from './modules/auth/auth.controller';
@@ -36,11 +39,11 @@ app.get('/health', (_req, res) => {
     });
 });
 
-app.post('/auth/register', asyncHandler((req, res) => {
+app.post('/auth/register', validationMiddleware(registerSchema), asyncHandler((req, res) => {
     return usersController.register(req, res);
 }));
 
-app.post('/auth/login', asyncHandler((req, res) => {
+app.post('/auth/login', validationMiddleware(loginSchema), asyncHandler((req, res) => {
     return authController.login(req, res);
 }));
 
