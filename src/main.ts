@@ -1,3 +1,5 @@
+import { authMiddleware } from './common/middleware/auth.middleware';
+import { roleMiddleware } from './common/middleware/role.middleware';
 import { AuthController } from './modules/auth/auth.controller';
 import { errorMiddleware } from './common/middleware/error.middleware';
 import { UsersController } from './modules/users/users.controller';
@@ -41,6 +43,31 @@ app.post('/auth/register', asyncHandler((req, res) => {
 app.post('/auth/login', asyncHandler((req, res) => {
     return authController.login(req, res);
 }));
+
+app.get(
+    '/users',
+    authMiddleware,
+    roleMiddleware(['ADMIN']),
+    asyncHandler((req, res) => {
+        return usersController.getAll(req, res);
+    }),
+);
+
+app.get(
+    '/users/:id',
+    authMiddleware,
+    asyncHandler((req, res) => {
+        return usersController.getById(req, res);
+    }),
+);
+
+app.patch(
+    '/users/:id/block',
+    authMiddleware,
+    asyncHandler((req, res) => {
+        return usersController.block(req, res);
+    }),
+);
 
 app.use(errorMiddleware);
 
