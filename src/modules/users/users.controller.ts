@@ -4,15 +4,6 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { AppError } from '../../common/errors/app-error';
 
 export class UsersController {
-    async register(req: Request, res: Response) {
-        const dto: RegisterUserDto = req.body;
-
-        const user = await usersService.createUser(dto);
-
-        res.status(201).json({
-            data: user,
-        });
-    }
 
     async getById(req: Request, res: Response) {
         const userId = req.params.id as string;
