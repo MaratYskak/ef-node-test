@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { UsersController } from '../modules/users/users.controller';
 import { authMiddleware } from '../common/middleware/auth.middleware';
 import { roleMiddleware } from '../common/middleware/role.middleware';
+import { asyncHandler } from '../common/utils/async-handler';
 
 const router = Router();
 
@@ -11,37 +12,25 @@ router.get(
     '/',
     authMiddleware,
     roleMiddleware(['ADMIN']),
-    async (req, res, next) => {
-        try {
-            await usersController.getAll(req, res);
-        } catch (error) {
-            next(error);
-        }
-    },
+    asyncHandler((req, res) =>
+        usersController.getAll(req, res),
+    )
 );
 
 router.get(
     '/:id',
     authMiddleware,
-    async (req, res, next) => {
-        try {
-            await usersController.getById(req, res);
-        } catch (error) {
-            next(error);
-        }
-    },
+    asyncHandler((req, res) =>
+        usersController.getById(req, res),
+    )
 );
 
 router.patch(
     '/:id/block',
     authMiddleware,
-    async (req, res, next) => {
-        try {
-            await usersController.block(req, res);
-        } catch (error) {
-            next(error);
-        }
-    },
+    asyncHandler((req, res) =>
+        usersController.block(req, res),
+    )
 );
 
 export default router;
