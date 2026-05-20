@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
+import { env } from '../../config/env';
 
 export class JwtService {
     private readonly secret: string;
 
     constructor() {
-        this.secret = process.env.JWT_SECRET || 'secret';
+        this.secret = env.JWT_SECRET;
     }
 
     generateToken(payload: {

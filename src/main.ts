@@ -11,11 +11,10 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { env } from './config/env';
 
 const app = express();
+const PORT = env.PORT;
 
 const usersController = new UsersController();
 const authController = new AuthController();
@@ -73,8 +72,6 @@ app.patch(
 );
 
 app.use(errorMiddleware);
-
-const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
