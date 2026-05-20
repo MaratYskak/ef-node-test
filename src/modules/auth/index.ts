@@ -6,7 +6,4 @@ const usersRepository = new UsersRepository();
 
 const jwtService = new JwtService();
 
-export const authService = new AuthService(
-    usersRepository,
-    jwtService,
-);
+export const authService = new AuthService(usersRepository, jwtService);

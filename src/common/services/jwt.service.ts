@@ -8,10 +8,7 @@ export class JwtService {
         this.secret = env.JWT_SECRET;
     }
 
-    generateToken(payload: {
-        userId: string;
-        role: string;
-    }) {
+    generateToken(payload: { userId: string; role: string }) {
         return jwt.sign(payload, this.secret, {
             expiresIn: '7d',
         });

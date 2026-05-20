@@ -12,17 +12,13 @@ const authController = new AuthController();
 router.post(
     '/register',
     validationMiddleware(registerSchema),
-    asyncHandler((req, res) =>
-        authController.register(req, res),
-    )
+    asyncHandler((req, res) => authController.register(req, res)),
 );
 
 router.post(
     '/login',
     validationMiddleware(loginSchema),
-    asyncHandler((req, res) =>
-        authController.login(req, res),
-    )
+    asyncHandler((req, res) => authController.login(req, res)),
 );
 
 export default router;

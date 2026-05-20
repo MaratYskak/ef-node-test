@@ -8,7 +8,7 @@ export class AuthService {
     constructor(
         private readonly usersRepository: UsersRepository,
         private readonly jwtService: JwtService,
-    ) { }
+    ) {}
 
     async login(email: string, password: string) {
         const user = await this.usersRepository.findByEmail(email);
@@ -17,10 +17,7 @@ export class AuthService {
             throw new AppError('Invalid credentials', 401);
         }
 
-        const isPasswordValid = await bcrypt.compare(
-            password,
-            user.password,
-        );
+        const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
             throw new AppError('Invalid credentials', 401);

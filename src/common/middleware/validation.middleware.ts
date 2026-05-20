@@ -3,20 +3,11 @@ import { ZodSchema } from 'zod';
 import { AppError } from '../errors/app-error';
 
 export function validationMiddleware(schema: ZodSchema) {
-    return (
-        req: Request,
-        _res: Response,
-        next: NextFunction,
-    ) => {
+    return (req: Request, _res: Response, next: NextFunction) => {
         const result = schema.safeParse(req.body);
 
         if (!result.success) {
-            return next(
-                new AppError(
-                    result.error.issues[0].message,
-                    400,
-                ),
-            );
+            return next(new AppError(result.error.issues[0].message, 400));
         }
 
         req.body = result.data;

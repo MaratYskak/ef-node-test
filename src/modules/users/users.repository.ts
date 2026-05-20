@@ -1,4 +1,5 @@
 import { prisma } from '../../common/prisma/prisma.service';
+import { User } from '@prisma/client';
 
 export class UsersRepository {
     async create(data: {
@@ -28,7 +29,7 @@ export class UsersRepository {
         return prisma.user.findMany();
     }
 
-    async update(id: string, data: any) {
+    async update(id: string, data: Partial<User>) {
         return prisma.user.update({
             where: { id },
             data,

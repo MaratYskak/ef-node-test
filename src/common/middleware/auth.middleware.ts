@@ -7,11 +7,9 @@ interface JwtPayload {
     role: string;
 }
 
-declare global {
-    namespace Express {
-        interface Request {
-            user?: JwtPayload;
-        }
+declare module 'express-serve-static-core' {
+    interface Request {
+        user?: JwtPayload;
     }
 }
 
@@ -23,17 +21,13 @@ export function authMiddleware(
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-        return next(
-            new AppError('Authorization header missing', 401),
-        );
+        return next(new AppError('Authorization header missing', 401));
     }
 
     const [type, token] = authHeader.split(' ');
 
     if (type !== 'Bearer' || !token) {
-        return next(
-            new AppError('Invalid authorization format', 401),
-        );
+        return next(new AppError('Invalid authorization format', 401));
     }
 
     try {
@@ -46,8 +40,6 @@ export function authMiddleware(
 
         next();
     } catch {
-        return next(
-            new AppError('Invalid or expired token', 401),
-        );
+        return next(new AppError('Invalid or expired token', 401));
     }
 }

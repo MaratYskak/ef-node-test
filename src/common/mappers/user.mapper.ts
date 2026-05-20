@@ -5,6 +5,6 @@ import { User } from '@prisma/client';
  * (never exposes sensitive fields like password)
  */
 export function toUserResponse(user: User) {
-    const { password, ...rest } = user;
+    const { password: _password, ...rest } = user;
     return rest;
 }

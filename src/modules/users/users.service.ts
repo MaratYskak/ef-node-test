@@ -4,7 +4,7 @@ import { toUserResponse } from '../../common/mappers/user.mapper';
 import { AppError } from '../../common/errors/app-error';
 
 export class UsersService {
-    constructor(private readonly usersRepository: UsersRepository) { }
+    constructor(private readonly usersRepository: UsersRepository) {}
 
     async createUser(data: {
         fullName: string;

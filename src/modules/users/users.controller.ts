@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
 import { usersService } from './index';
-import { RegisterUserDto } from './dto/register-user.dto';
 import { AppError } from '../../common/errors/app-error';
 
 export class UsersController {
-
     async getById(req: Request, res: Response) {
         const userId = req.params.id as string;
 
